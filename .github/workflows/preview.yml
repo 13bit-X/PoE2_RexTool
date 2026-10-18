@@ -1,0 +1,86 @@
+name: Sync upstream and publish preview
+
+# Scheduled workflows run on the default branch (automation).
+# https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule
+on:
+  schedule:
+    - cron: '23 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: preview-publish
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: automation
+          fetch-depth: 0
+      - name: Merge upstream without overwriting local fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main preview
+          git fetch https://github.com/lakemem0ry/PoE2_RexTool.git main
+          upstream_sha=$(git rev-parse FETCH_HEAD)
+          git switch -C main origin/main
+          git merge --ff-only "$upstream_sha"
+          git switch -C preview origin/preview
+          if ! git merge --no-edit main; then
+            git merge --abort
+            echo '::error::Upstream conflicts with preview. Resolve the conflict on preview and run this workflow again. The published site and remote branches have not been changed.'
+            exit 1
+          fi
+          # Atomic, non-force push rejects concurrent edits and preserves both branches.
+          git push --atomic origin main:main preview:preview
+
+  build:
+    needs: sync
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: preview
+          persist-credentials: false
+      - name: Package the single HTML file
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f PoE2_RexTool.html
+          test ! -L PoE2_RexTool.html
+          mkdir -p _site
+          cp PoE2_RexTool.html _site/index.html
+          touch _site/.nojekyll
+          git rev-parse HEAD > _site/version.txt
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
+      - name: Publish preview
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
