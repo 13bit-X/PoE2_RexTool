@@ -30,6 +30,11 @@ with sync_playwright() as p:
     page.goto(url)
     assert page.locator('#tabs button').count() == 2
     expect(page.locator('#price-card')).to_be_visible()
+    expect(page.locator('#price-reset')).to_have_text('清除')
+    assert page.locator('#price-card #price-share').count() == 0
+    assert page.locator('#price-intro, #price-budget').count() == 0
+    assert page.locator('#price-card').bounding_box()['height'] <= 160, 'Price controls must fit a compact desktop row'
+    print(f"Desktop price card: {page.locator('#price-card').bounding_box()['height']}px", flush=True)
     expect(page.locator('#copy')).to_be_disabled()
     page.locator('#price-min').fill('1')
     page.locator('#price-max').fill('2')
@@ -44,7 +49,6 @@ with sync_playwright() as p:
     assert not matches(combined, '9阶\n~b/o 1 divine')
     assert not matches(combined, '10阶\n~b/o 3 divine')
     expect(page.locator('#regex-length')).to_have_text(f'{len(combined)} / 250')
-    expect(page.locator('#price-budget')).to_contain_text(f'剩余 {250-len(combined)}')
     page.locator('#copy').click()
     expect(page.locator('#status')).to_contain_text('已复制')
     assert page.evaluate('navigator.clipboard.readText()') == combined
@@ -132,7 +136,7 @@ with sync_playwright() as p:
     page.locator('[data-price-mode=between]').click()
     page.locator('#price-min').fill('1234567890123456')
     page.locator('#price-max').fill('8765432109876543')
-    expect(page.locator('#price-budget')).to_contain_text('超出 250')
+    expect(page.locator('#regex-message')).to_contain_text('250')
     expect(page.locator('#copy')).to_be_disabled()
     assert '~b/o' in page.locator('#regex-source').inner_text()
     page.locator('#clear').click()
@@ -144,6 +148,8 @@ with sync_playwright() as p:
     page.screenshot(path=str(screens / 'stash-price-integrated-desktop.png'))
     page.set_viewport_size({'width': 390, 'height': 844})
     assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), 'Mobile horizontal overflow'
+    assert page.locator('#price-card').bounding_box()['height'] <= 270, 'Compact mobile controls'
+    print(f"Mobile price card: {page.locator('#price-card').bounding_box()['height']}px", flush=True)
     page.screenshot(path=str(screens / 'stash-price-integrated-mobile.png'), full_page=True)
     assert not errors, errors
     blocked = browser.new_context()

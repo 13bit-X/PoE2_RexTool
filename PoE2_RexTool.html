@@ -79,6 +79,12 @@ a:hover { text-decoration: underline; }
 .c-sub-2 { color: var(--sub-2); }
 .is-hidden { display: none; }
 #price-card .is-hidden { display: none; }
+.price-controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 20px; }
+.price-bounds { display: flex; gap: 10px; }
+.price-bounds .tier-field { width: 106px; }
+#price-feedback:empty { display: none; }
+#price-feedback:not(:empty) { margin-top: 10px; }
+.regex-head .btn { padding: 0; font-size: 11px; font-weight: 500; }
 
 .control-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .control-row.between { justify-content: space-between; }
@@ -291,27 +297,27 @@ a:hover { text-decoration: underline; }
       </section>
 
       <section class="card" id="price-card" aria-labelledby="price-title">
-        <div class="card-head"><h2 id="price-title">售价筛选</h2><span class="spacer"></span><button type="button" class="btn small ghost" id="price-reset">重置</button><button type="button" class="btn small ghost" id="price-share" disabled>复制筛选链接</button></div>
-        <p class="hint mb-lg" id="price-intro"></p>
-        <p class="hint mb-sm" id="price-currency-label">币种</p>
-        <div class="chips mb-lg" id="price-currencies" role="group" aria-labelledby="price-currency-label">
+        <div class="card-head"><h2 id="price-title">售价筛选</h2><span class="spacer"></span><button type="button" class="btn small ghost" id="price-reset">清除</button></div>
+        <div class="price-controls">
+        <span class="sr-only" id="price-currency-label">币种</span>
+        <div class="chips" id="price-currencies" role="group" aria-labelledby="price-currency-label">
           <button type="button" class="chip" data-price-currency="exalted" aria-pressed="true">崇高石</button>
           <button type="button" class="chip" data-price-currency="divine" aria-pressed="false">神圣石</button>
           <button type="button" class="chip" data-price-currency="chaos" aria-pressed="false">混沌石</button>
         </div>
-        <p class="hint mb-sm" id="price-mode-label">筛选方式</p>
-        <div class="chips mb-lg" id="price-modes" role="group" aria-labelledby="price-mode-label">
+        <span class="sr-only" id="price-mode-label">筛选方式</span>
+        <div class="chips" id="price-modes" role="group" aria-labelledby="price-mode-label">
           <button type="button" class="chip" data-price-mode="max" aria-pressed="false">至多</button>
           <button type="button" class="chip" data-price-mode="between" aria-pressed="true">区间</button>
           <button type="button" class="chip" data-price-mode="min" aria-pressed="false">至少</button>
         </div>
-        <div class="tier-grid mb-lg">
+        <div class="price-bounds">
           <div class="tier-field" id="price-min-field"><label for="price-min" id="price-min-label">最低价</label><input class="input" id="price-min" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" maxlength="32" aria-describedby="price-help price-feedback"></div>
           <div class="tier-field" id="price-max-field"><label for="price-max" id="price-max-label">最高价</label><input class="input" id="price-max" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" maxlength="32" aria-describedby="price-help price-feedback"></div>
         </div>
-        <p class="hint mb" id="price-help"></p>
+        </div>
+        <p class="sr-only" id="price-help"></p>
         <p class="regex-msg" id="price-feedback" role="status" aria-live="polite"></p>
-        <p class="hint" id="price-budget"></p>
       </section>
 
       <section class="card" id="tier-card" aria-labelledby="tier-heading">
@@ -410,6 +416,7 @@ a:hover { text-decoration: underline; }
           <div class="regex-head">
             <span id="regex-heading">交易站搜索框</span>
             <span class="spacer"></span>
+            <button type="button" class="btn ghost" id="price-share" disabled>复制链接</button>
             <span class="len" id="regex-length"></span>
           </div>
           <pre class="regex-source empty" id="regex-source"></pre>
@@ -1220,24 +1227,17 @@ window.POE2_PRICE = (function () {
   var state = defaults(), storageOK = true;
   var PRICE_WORDS = {
       title: ['售价筛选', '售價篩選', 'Price filter'],
-      intro: ['按挂牌售价筛选，与本页其他条件同时生效。', '依掛牌售價篩選，與本頁其他條件同時生效。', 'Filter listed prices together with all other conditions on this tab.'],
       currency: ['币种', '通貨', 'Currency'], mode: ['筛选方式', '篩選方式', 'Compare'],
       exalted: ['崇高石', '崇高石', 'Exalted'], divine: ['神圣石', '神聖石', 'Divine'], chaos: ['混沌石', '混沌石', 'Chaos'],
       min: ['至少', '至少', 'At least'], max: ['至多', '至多', 'At most'], between: ['区间', '區間', 'Between'],
       lower: ['最低价', '最低價', 'Minimum'], upper: ['最高价', '最高價', 'Maximum'],
-      unlimited: ['不限', '不限', 'No limit'], reset: ['重置', '重置', 'Reset'],
+      unlimited: ['不限', '不限', 'No limit'], reset: ['清除', '清除', 'Clear'],
       help: ['仅支持正整数，包含区间两端；留空表示不设该端限制。比例标价不参与匹配。', '僅支援正整數，包含區間兩端；留空表示不設該端限制。比例標價不參與比對。', 'Positive integers, inclusive bounds. Leave a bound blank for no limit. Ratio prices are excluded.'],
-      empty: ['请填写价格条件。', '請填寫價格條件。', 'Enter a price condition.'],
       integer: ['售价条件未生效：请输入有效的正整数，不支持小数或过大的数值。', '售價條件未生效：請輸入有效的正整數，不支援小數或過大的數值。', 'Price condition not applied: enter valid positive integers, without decimals or excessively large values.'],
       order: ['售价条件未生效：最低价不能高于最高价。', '售價條件未生效：最低價不能高於最高價。', 'Price condition not applied: minimum must not exceed maximum.'],
-      result: ['售价条件', '售價條件', 'Price condition'], output: ['游戏内搜索框', '遊戲內搜尋框', 'In-game search box'],
-      copy: ['复制正则', '複製正則', 'Copy regex'], share: ['复制筛选链接', '複製篩選連結', 'Copy filter link'],
-      copied: ['已复制', '已複製', 'Copied'], copyFailed: ['复制失败，请手动选择输出文字复制。', '複製失敗，請手動選取輸出文字複製。', 'Copy failed. Select and copy the output manually.'],
-      remaining: ['售价 {p} 字符，合计 {n}/250，剩余 {r} 字符。', '售價 {p} 字元，合計 {n}/250，剩餘 {r} 字元。', 'Price: {p} characters; total: {n}/250; remaining: {r}.'],
-      over: ['超出 250 字符，售价条件不可复制；请简化价格区间。', '超出 250 字元，售價條件無法複製；請簡化價格區間。', 'Over 250 characters. Simplify the price range before copying.'],
-      saved: ['条件已保存在当前浏览器', '條件已儲存在目前瀏覽器', 'Conditions saved in this browser'],
-      saveFailed: ['浏览器无法保存条件；本次仍可生成和复制。', '瀏覽器無法儲存條件；本次仍可產生和複製。', 'Browser storage unavailable; generation and copying still work.'],
-      summary: ['{range} {currency}，包含边界。', '{range} {currency}，包含邊界。', '{range} {currency}, inclusive.']
+      output: ['游戏内搜索框', '遊戲內搜尋框', 'In-game search box'],
+      share: ['复制链接', '複製連結', 'Copy link'],
+      summary: ['{range} {currency}', '{range} {currency}', '{range} {currency}']
     };
 
   try { state = restore(JSON.parse(localStorage.getItem(KEY) || 'null')); } catch (e) { storageOK = false; }
@@ -2106,8 +2106,9 @@ window.POE2_PRICE = (function () {
   }
   function renderPrice() {
     var p = page().price;
-    var labels = { 'price-title': 'title', 'price-intro': 'intro', 'price-currency-label': 'currency', 'price-mode-label': 'mode', 'price-min-label': 'lower', 'price-max-label': 'upper', 'price-help': 'help', 'price-share': 'share', 'price-reset': 'reset' };
+    var labels = { 'price-title': 'title', 'price-currency-label': 'currency', 'price-mode-label': 'mode', 'price-min-label': 'lower', 'price-max-label': 'upper', 'price-help': 'help', 'price-share': 'share', 'price-reset': 'reset' };
     Object.keys(labels).forEach(function (id) { $(id).textContent = pt(labels[id]); });
+    $('price-title').title = pt('help');
     ['currency', 'mode'].forEach(function (kind) {
       $('price-' + (kind === 'currency' ? 'currencies' : 'modes')).querySelectorAll('button').forEach(function (b) {
         var value = b.getAttribute('data-price-' + kind);
@@ -2123,7 +2124,6 @@ window.POE2_PRICE = (function () {
     $('price-feedback').textContent = error;
     $('price-feedback').className = 'regex-msg' + (error ? ' error' : '');
     ['min', 'max'].forEach(function (side) { $('price-' + side).setAttribute('aria-invalid', String(!!error)); });
-    $('price-budget').textContent = price.source ? (res.over ? pt('over') : pt('remaining').replace('{p}', price.length).replace('{n}', res.length).replace('{r}', R.BUDGET - res.length)) : '';
     $('price-share').disabled = !res.ok || res.over || res.unresolved.length > 0;
   }
   function bindPrice() {
