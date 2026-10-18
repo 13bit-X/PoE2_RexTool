@@ -1295,7 +1295,8 @@ window.POE2_PRICE = (function () {
     var lines = affixLines(a);
     if (!lines || !lines.length) return null;
     
-    var text = lines.join(' ');
+    // A compound modifier's first line identifies it without matching across item lines.
+    var text = a.composite ? lines[0] : lines.join(' ');
     if (sel && sel.mode === 'include' && (sel.value !== '' || sel.value2 !== '')) {
       var t = R.threshold(text, { atLeast: sel.value !== '' ? Number(sel.value) : undefined, atMost: sel.value2 !== '' ? Number(sel.value2) : undefined });
       if (t) return t;
