@@ -79,7 +79,9 @@ a:hover { text-decoration: underline; }
 .c-sub-2 { color: var(--sub-2); }
 .is-hidden { display: none; }
 #price-card .is-hidden { display: none; }
-.price-controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 20px; }
+.price-controls { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px 20px; }
+.price-option { display: flex; flex-direction: column; gap: 4px; }
+.price-label { font-size: 11.5px; font-weight: 600; color: var(--sub); }
 .price-bounds { display: flex; gap: 10px; }
 .price-bounds .tier-field { width: 106px; }
 #price-feedback:empty { display: none; }
@@ -299,17 +301,21 @@ a:hover { text-decoration: underline; }
       <section class="card" id="price-card" aria-labelledby="price-title">
         <div class="card-head"><h2 id="price-title">售价筛选</h2><span class="spacer"></span><button type="button" class="btn small ghost" id="price-reset">清除</button></div>
         <div class="price-controls">
-        <span class="sr-only" id="price-currency-label">币种</span>
+        <div class="price-option">
+        <span class="price-label" id="price-currency-label">币种</span>
         <div class="chips" id="price-currencies" role="group" aria-labelledby="price-currency-label">
           <button type="button" class="chip" data-price-currency="exalted" aria-pressed="true">崇高石</button>
           <button type="button" class="chip" data-price-currency="divine" aria-pressed="false">神圣石</button>
           <button type="button" class="chip" data-price-currency="chaos" aria-pressed="false">混沌石</button>
         </div>
-        <span class="sr-only" id="price-mode-label">筛选方式</span>
+        </div>
+        <div class="price-option">
+        <span class="price-label" id="price-mode-label">筛选方式</span>
         <div class="chips" id="price-modes" role="group" aria-labelledby="price-mode-label">
           <button type="button" class="chip" data-price-mode="max" aria-pressed="false">至多</button>
           <button type="button" class="chip" data-price-mode="between" aria-pressed="true">区间</button>
           <button type="button" class="chip" data-price-mode="min" aria-pressed="false">至少</button>
+        </div>
         </div>
         <div class="price-bounds">
           <div class="tier-field" id="price-min-field"><label for="price-min" id="price-min-label">最低价</label><input class="input" id="price-min" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" maxlength="32" aria-describedby="price-help price-feedback"></div>
