@@ -1,0 +1,96 @@
+{
+  "checkedAt": "2026-10-18",
+  "cases": [
+    {
+      "id": "wt020",
+      "lang": "cn",
+      "source": "https://poe2db.tw/cn/Waystones",
+      "samples": [
+        "怪物可以发射 2 个额外投射物",
+        "怪物可以发射 3 个额外投射物"
+      ]
+    },
+    {
+      "id": "wt020",
+      "lang": "tw",
+      "source": "https://poe2db.tw/tw/Waystones",
+      "samples": [
+        "怪物發射2個額外投射物",
+        "怪物發射3個額外投射物"
+      ]
+    },
+    {
+      "id": "wt020",
+      "lang": "en",
+      "source": "https://poe2db.tw/us/Waystones",
+      "samples": [
+        "Monsters fire 2 additional Projectiles",
+        "Monsters fire 3 additional Projectiles"
+      ]
+    },
+    {
+      "id": "wt-6",
+      "lang": "cn",
+      "source": "https://poe2db.tw/cn/Tablet",
+      "samples": [
+        "地图包含 1 个额外的阿兹莫里之灵"
+      ]
+    },
+    {
+      "id": "wt-13",
+      "lang": "cn",
+      "source": "https://poe2db.tw/cn/Tablet",
+      "samples": [
+        "怪物的强度提高 (10—15)%"
+      ]
+    },
+    {
+      "id": "wt-26",
+      "lang": "cn",
+      "source": "https://poe2db.tw/cn/Tablet",
+      "samples": [
+        "地图内的裂隙怪物密度提高 (5—15)%"
+      ]
+    },
+    {
+      "id": "wt-65",
+      "lang": "cn",
+      "source": "https://poe2db.tw/cn/Tablet",
+      "samples": [
+        "地图中的惊悸迷雾生成的破溃之镜碎片提高 (12—26)%"
+      ]
+    },
+    {
+      "id": "wt-70",
+      "lang": "cn",
+      "source": "https://poe2db.tw/cn/Tablet",
+      "samples": [
+        "地图中的深渊巨坑有双倍几率有奖励"
+      ]
+    },
+    {
+      "id": "wt-83",
+      "lang": "cn",
+      "source": "https://poe2db.tw/cn/Tablet",
+      "samples": [
+        "每关闭一个巨坑，深渊怪物的强度提高 (8—12)%，最高可达 100%"
+      ]
+    },
+    {
+      "id": "wt-83",
+      "lang": "tw",
+      "source": "https://poe2db.tw/tw/Tablet",
+      "samples": [
+        "每有一個已關閉的坑洞，增加(8—12)%深淵怪物效用，最多100%"
+      ]
+    },
+    {
+      "id": "wt-83",
+      "lang": "en",
+      "source": "https://poe2db.tw/us/Tablet",
+      "samples": [
+        "Abyssal Monsters have (8—12)% increased Effectiveness for each closed Pit, up to 100%"
+      ]
+    }
+  ]
+}
