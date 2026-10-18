@@ -78,7 +78,7 @@ a:hover { text-decoration: underline; }
 .c-sub { color: var(--sub); }
 .c-sub-2 { color: var(--sub-2); }
 .is-hidden { display: none; }
-#price-workspace .is-hidden { display: none; }
+#price-card .is-hidden { display: none; }
 
 .control-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .control-row.between { justify-content: space-between; }
@@ -265,7 +265,6 @@ a:hover { text-decoration: underline; }
       <nav class="segmented" id="tabs" aria-label="物品类型">
         <button type="button" data-tab="waystone" aria-pressed="true" id="tab-waystone">引路石</button>
         <button type="button" data-tab="tablet" aria-pressed="false" id="tab-tablet">石板</button>
-        <button type="button" aria-pressed="false" id="tab-price">售价筛选</button>
       </nav>
       <div class="toolbar-end">
         <label class="field-inline">
@@ -289,6 +288,30 @@ a:hover { text-decoration: underline; }
           <span class="badge" id="primary-badge">0</span>
         </div>
         <div id="primary-body"></div>
+      </section>
+
+      <section class="card" id="price-card" aria-labelledby="price-title">
+        <div class="card-head"><h2 id="price-title">售价筛选</h2><span class="spacer"></span><button type="button" class="btn small ghost" id="price-reset">重置</button><button type="button" class="btn small ghost" id="price-share" disabled>复制筛选链接</button></div>
+        <p class="hint mb-lg" id="price-intro"></p>
+        <p class="hint mb-sm" id="price-currency-label">币种</p>
+        <div class="chips mb-lg" id="price-currencies" role="group" aria-labelledby="price-currency-label">
+          <button type="button" class="chip" data-price-currency="exalted" aria-pressed="true">崇高石</button>
+          <button type="button" class="chip" data-price-currency="divine" aria-pressed="false">神圣石</button>
+          <button type="button" class="chip" data-price-currency="chaos" aria-pressed="false">混沌石</button>
+        </div>
+        <p class="hint mb-sm" id="price-mode-label">筛选方式</p>
+        <div class="chips mb-lg" id="price-modes" role="group" aria-labelledby="price-mode-label">
+          <button type="button" class="chip" data-price-mode="max" aria-pressed="false">至多</button>
+          <button type="button" class="chip" data-price-mode="between" aria-pressed="true">区间</button>
+          <button type="button" class="chip" data-price-mode="min" aria-pressed="false">至少</button>
+        </div>
+        <div class="tier-grid mb-lg">
+          <div class="tier-field" id="price-min-field"><label for="price-min" id="price-min-label">最低价</label><input class="input" id="price-min" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" maxlength="32" aria-describedby="price-help price-feedback"></div>
+          <div class="tier-field" id="price-max-field"><label for="price-max" id="price-max-label">最高价</label><input class="input" id="price-max" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" maxlength="32" aria-describedby="price-help price-feedback"></div>
+        </div>
+        <p class="hint mb" id="price-help"></p>
+        <p class="regex-msg" id="price-feedback" role="status" aria-live="polite"></p>
+        <p class="hint" id="price-budget"></p>
       </section>
 
       <section class="card" id="tier-card" aria-labelledby="tier-heading">
@@ -432,46 +455,6 @@ a:hover { text-decoration: underline; }
           <h2 id="sponsor-heading">自愿赞助</h2>
         </div>
         <p class="hint lh" id="sponsor-body"><span class="bili-badge">B站</span><a class="notice-link" href="https://space.bilibili.com/7132721" target="_blank" rel="noopener noreferrer">LMemory氿忆</a></p>
-      </section>
-    </aside>
-  </main>
-
-  <main class="workspace is-hidden" id="price-workspace" aria-labelledby="price-title">
-    <div class="column">
-      <section class="card">
-        <div class="card-head"><h2 id="price-title">售价筛选</h2><span class="spacer"></span><button type="button" class="btn small ghost" id="price-reset">重置</button></div>
-        <p class="hint mb-lg" id="price-intro"></p>
-        <p class="hint mb-sm" id="price-currency-label">币种</p>
-        <div class="chips mb-lg" id="price-currencies" role="group" aria-labelledby="price-currency-label">
-          <button type="button" class="chip" data-price-currency="exalted" aria-pressed="true">崇高石</button>
-          <button type="button" class="chip" data-price-currency="divine" aria-pressed="false">神圣石</button>
-          <button type="button" class="chip" data-price-currency="chaos" aria-pressed="false">混沌石</button>
-        </div>
-        <p class="hint mb-sm" id="price-mode-label">筛选方式</p>
-        <div class="chips mb-lg" id="price-modes" role="group" aria-labelledby="price-mode-label">
-          <button type="button" class="chip" data-price-mode="max" aria-pressed="false">至多</button>
-          <button type="button" class="chip" data-price-mode="between" aria-pressed="true">区间</button>
-          <button type="button" class="chip" data-price-mode="min" aria-pressed="false">至少</button>
-        </div>
-        <div class="tier-grid mb-lg">
-          <div class="tier-field" id="price-min-field"><label for="price-min" id="price-min-label">最低价</label><input class="input" id="price-min" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" maxlength="32" aria-describedby="price-help price-feedback"></div>
-          <div class="tier-field" id="price-max-field"><label for="price-max" id="price-max-label">最高价</label><input class="input" id="price-max" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" maxlength="32" aria-describedby="price-help price-feedback"></div>
-        </div>
-        <p class="hint mb" id="price-help"></p>
-        <p class="regex-msg" id="price-feedback" role="status" aria-live="polite"></p>
-      </section>
-    </div>
-    <aside class="column">
-      <section class="card sticky">
-        <div class="card-head"><h2 id="price-result-title">售价条件</h2></div>
-        <p class="hint mb-lg" id="price-summary"></p>
-        <div class="regex-box">
-          <div class="regex-head"><span id="price-output-label">游戏内搜索框</span><span class="spacer"></span><span class="len" id="price-length"></span></div>
-          <pre class="regex-source empty" id="price-source"></pre>
-          <p class="regex-msg" id="price-budget" role="status"></p>
-        </div>
-        <div class="actions"><button type="button" class="btn primary grow" id="price-copy" disabled>复制正则</button><button type="button" class="btn" id="price-share" disabled>复制链接</button></div>
-        <p class="status mt" id="price-status" role="status"></p>
       </section>
     </aside>
   </main>
@@ -1005,10 +988,103 @@ window.POE2_HIGHVALUE = {
 };
 </script>
 <script>
+// Price ranges are separate from affix ranges: no 999 clamp or lossy fitting.
+window.POE2_PRICE = (function () {
+  'use strict';
+  var BUDGET = 250;
+  var CURRENCIES = { exalted: 'ex', divine: 'div', chaos: 'chaos' };
+  function shortest(a, b) { return b.length < a.length ? b : a; }
+  function digits(n) {
+    if (!n) return '';
+    return shortest('[0-9]'.repeat(n), '[0-9]{' + n + '}');
+  }
+  function digitSet(ds) {
+    if (ds.length === 1) return ds;
+    var body = '', i = 0;
+    while (i < ds.length) {
+      var j = i;
+      while (j + 1 < ds.length && +ds[j + 1] === +ds[j] + 1) j++;
+      body += j - i >= 3 ? ds[i] + '-' + ds[j] : ds.slice(i, j + 1);
+      i = j + 1;
+    }
+    return '[' + body + ']';
+  }
+  function tokens(pattern) {
+    return pattern.match(/\[[^\]]+\](?:\{[0-9,]+\}|[?*+])?|\([^()]*\)[?*+]?|[0-9]/g) || [];
+  }
+  function union(parts) {
+    parts = parts.filter(function (s, i) { return parts.indexOf(s) === i; });
+    if (parts.length === 1) return parts[0];
+    var nonempty = parts.filter(Boolean);
+    if (nonempty.length !== parts.length) {
+      var inner = union(nonempty);
+      return (tokens(inner).length === 1 && tokens(inner).join('') === inner ? inner : '(' + inner + ')') + '?';
+    }
+    var plain = '(' + parts.join('|') + ')';
+    var lists = parts.map(tokens);
+    // Factor only complete regex tokens, never a partial character class/group.
+    if (lists.some(function (ts, i) { return ts.join('') !== parts[i]; })) return plain;
+    var prefix = '';
+    while (lists.every(function (ts) { return ts.length && ts[0] === lists[0][0]; })) {
+      prefix += lists[0][0]; lists.forEach(function (ts) { ts.shift(); });
+    }
+    if (prefix) plain = shortest(plain, prefix + union(lists.map(function (ts) { return ts.join(''); })));
+    return plain;
+  }
+  function sameWidth(lo, hi) {
+    if (lo === hi) return lo;
+    if (/^0+$/.test(lo) && /^9+$/.test(hi)) return digits(lo.length);
+    var groups = [];
+    for (var d = +lo[0]; d <= +hi[0]; d++) {
+      var suffix = lo.length === 1 ? '' : sameWidth(
+        d === +lo[0] ? lo.slice(1) : '0'.repeat(lo.length - 1),
+        d === +hi[0] ? hi.slice(1) : '9'.repeat(hi.length - 1));
+      var group = groups.filter(function (g) { return g.suffix === suffix; })[0];
+      if (group) group.ds += d; else groups.push({ ds: String(d), suffix: suffix });
+    }
+    return union(groups.map(function (g) { return digitSet(g.ds) + g.suffix; }));
+  }
+  function range(lo, hi) {
+    var parts = [];
+    for (var w = lo.length; w <= hi.length; w++) {
+      parts.push(sameWidth(w === lo.length ? lo : '1' + '0'.repeat(w - 1), w === hi.length ? hi : '9'.repeat(w)));
+    }
+    return union(parts);
+  }
+  function atLeast(lo) {
+    if (lo === '1') return '[1-9][0-9]*';
+    var tail = lo.length === 1 ? '[0-9]+' : '[0-9]{' + lo.length + ',}';
+    return union([sameWidth(lo, '9'.repeat(lo.length)), '[1-9]' + tail]);
+  }
+  function sanitize(raw) {
+    raw = raw && typeof raw === 'object' ? raw : {};
+    return {
+      currency: Object.prototype.hasOwnProperty.call(CURRENCIES, raw.currency) ? raw.currency : 'exalted',
+      mode: ['min', 'max', 'between'].indexOf(raw.mode) >= 0 ? raw.mode : 'between',
+      min: typeof raw.min === 'string' ? raw.min.slice(0, 32) : '',
+      max: typeof raw.max === 'string' ? raw.max.slice(0, 32) : ''
+    };
+  }
+  function compile(raw) {
+    var p = sanitize(raw), lo = p.mode === 'max' ? '' : p.min.trim(), hi = p.mode === 'min' ? '' : p.max.trim();
+    function fail(error) { return { source: '', length: 0, error: error, over: false }; }
+    if (!lo && !hi) return fail('empty');
+    if ([lo, hi].some(function (v) { return v && (!/^[0-9]+$/.test(v) || !Number.isSafeInteger(Number(v)) || Number(v) < 1); })) return fail('integer');
+    lo = lo ? String(Number(lo)) : '1'; hi = hi ? String(Number(hi)) : '';
+    if (hi && Number(lo) > Number(hi)) return fail('order');
+    var number = hi ? range(lo, hi) : atLeast(lo);
+    var source = '"~b/o ' + number + ' ' + CURRENCIES[p.currency] + '"';
+    return { source: source, length: source.length, error: '', over: source.length > BUDGET, min: lo, max: hi, currency: p.currency };
+  }
+  return { compile: compile, sanitize: sanitize, BUDGET: BUDGET };
+})();
+</script>
+<script>
 (function () {
   'use strict';
   var D = window.POE2_DATA || { waystone: [], tablet: [] };
   var R = window.POE2_REGEX;
+  var P = window.POE2_PRICE;
   var I = window.POE2_I18N;
   var HV = window.POE2_HIGHVALUE || {};
   var $ = function (id) { return document.getElementById(id); };
@@ -1023,7 +1099,7 @@ window.POE2_HIGHVALUE = {
     return {
       prefix: true, suffix: true, search: '', match: 'all',
       types: [], basic: { revives: '', rarities: [] }, selected: {},
-      tierMin: '', tierMax: '',
+      tierMin: '', tierMax: '', price: P.sanitize(null),
       summary: { eff: '', itemRarity: '', monsterRarity: '', packSize: '', waystone: '' }
     };
   }
@@ -1069,12 +1145,14 @@ window.POE2_HIGHVALUE = {
       if (typeof src.prefix === 'boolean') p.prefix = src.prefix;
       if (typeof src.suffix === 'boolean') p.suffix = src.suffix;
       if (typeof src.search === 'string' && src.search.length <= 64) p.search = src.search;
+      p.price = P.sanitize(src.price);
       p.match = src.match === 'any' ? 'any' : 'all';
       p.types = Array.isArray(src.types) ? src.types.slice(0, 16) : [];
       if (typeof src.tierMin === 'string' && src.tierMin.length <= 2) p.tierMin = src.tierMin;
       if (typeof src.tierMax === 'string' && src.tierMax.length <= 2) p.tierMax = src.tierMax;
       if (src.basic && typeof src.basic === 'object') {
-        ['rarity', 'corruption'].forEach(function (k) {
+        p.basic.rarities = Array.isArray(src.basic.rarities) ? src.basic.rarities.filter(function (k) { return ['normal', 'magic', 'rare', 'unique'].indexOf(k) >= 0; }).slice(0, 4) : [];
+        ['rarity', 'corruption', 'revives'].forEach(function (k) {
           if (typeof src.basic[k] === 'string' && src.basic[k].length <= 12) p.basic[k] = src.basic[k];
         });
       }
@@ -1103,15 +1181,16 @@ window.POE2_HIGHVALUE = {
   function sanitizeSnapshot(src) {
     var out = { prefix: true, suffix: true, match: 'all', types: [], basic: {}, selected: {}, summary: {}, tierMin: '', tierMax: '' };
     if (!src || typeof src !== 'object') return out;
+    out.price = P.sanitize(src.price);
     if (typeof src.prefix === 'boolean') out.prefix = src.prefix;
     if (typeof src.suffix === 'boolean') out.suffix = src.suffix;
     out.match = src.match === 'any' ? 'any' : 'all';
-    out.types = Array.isArray(src.types) ? src.types.slice(0, 16) : [];
+    out.types = Array.isArray(src.types) ? src.types.filter(function (id) { return I.tabletTypes.some(function (t) { return t.id === id; }); }).slice(0, 16) : [];
     if (typeof src.tierMin === 'string') out.tierMin = src.tierMin.slice(0, 2);
     if (typeof src.tierMax === 'string') out.tierMax = src.tierMax.slice(0, 2);
     if (src.basic && typeof src.basic === 'object') {
       ['rarity', 'corruption', 'revives'].forEach(function (k) {
-        if (typeof src.basic[k] === 'string') out.basic[k] = src.basic[k];
+        if (typeof src.basic[k] === 'string' && (k !== 'revives' || /^[0-5]$/.test(src.basic[k]))) out.basic[k] = src.basic[k];
       });
       out.basic.rarities = Array.isArray(src.basic.rarities)
         ? src.basic.rarities.filter(function (x) { return ['normal', 'magic', 'rare', 'unique'].indexOf(x) >= 0; }).slice(0, 4)
@@ -1139,9 +1218,34 @@ window.POE2_HIGHVALUE = {
   }
 
   var state = defaults(), storageOK = true;
+  var PRICE_WORDS = {
+      title: ['售价筛选', '售價篩選', 'Price filter'],
+      intro: ['按挂牌售价筛选，与本页其他条件同时生效。', '依掛牌售價篩選，與本頁其他條件同時生效。', 'Filter listed prices together with all other conditions on this tab.'],
+      currency: ['币种', '通貨', 'Currency'], mode: ['筛选方式', '篩選方式', 'Compare'],
+      exalted: ['崇高石', '崇高石', 'Exalted'], divine: ['神圣石', '神聖石', 'Divine'], chaos: ['混沌石', '混沌石', 'Chaos'],
+      min: ['至少', '至少', 'At least'], max: ['至多', '至多', 'At most'], between: ['区间', '區間', 'Between'],
+      lower: ['最低价', '最低價', 'Minimum'], upper: ['最高价', '最高價', 'Maximum'],
+      unlimited: ['不限', '不限', 'No limit'], reset: ['重置', '重置', 'Reset'],
+      help: ['仅支持正整数，包含区间两端；留空表示不设该端限制。比例标价不参与匹配。', '僅支援正整數，包含區間兩端；留空表示不設該端限制。比例標價不參與比對。', 'Positive integers, inclusive bounds. Leave a bound blank for no limit. Ratio prices are excluded.'],
+      empty: ['请填写价格条件。', '請填寫價格條件。', 'Enter a price condition.'],
+      integer: ['售价条件未生效：请输入有效的正整数，不支持小数或过大的数值。', '售價條件未生效：請輸入有效的正整數，不支援小數或過大的數值。', 'Price condition not applied: enter valid positive integers, without decimals or excessively large values.'],
+      order: ['售价条件未生效：最低价不能高于最高价。', '售價條件未生效：最低價不能高於最高價。', 'Price condition not applied: minimum must not exceed maximum.'],
+      result: ['售价条件', '售價條件', 'Price condition'], output: ['游戏内搜索框', '遊戲內搜尋框', 'In-game search box'],
+      copy: ['复制正则', '複製正則', 'Copy regex'], share: ['复制筛选链接', '複製篩選連結', 'Copy filter link'],
+      copied: ['已复制', '已複製', 'Copied'], copyFailed: ['复制失败，请手动选择输出文字复制。', '複製失敗，請手動選取輸出文字複製。', 'Copy failed. Select and copy the output manually.'],
+      remaining: ['售价 {p} 字符，合计 {n}/250，剩余 {r} 字符。', '售價 {p} 字元，合計 {n}/250，剩餘 {r} 字元。', 'Price: {p} characters; total: {n}/250; remaining: {r}.'],
+      over: ['超出 250 字符，售价条件不可复制；请简化价格区间。', '超出 250 字元，售價條件無法複製；請簡化價格區間。', 'Over 250 characters. Simplify the price range before copying.'],
+      saved: ['条件已保存在当前浏览器', '條件已儲存在目前瀏覽器', 'Conditions saved in this browser'],
+      saveFailed: ['浏览器无法保存条件；本次仍可生成和复制。', '瀏覽器無法儲存條件；本次仍可產生和複製。', 'Browser storage unavailable; generation and copying still work.'],
+      summary: ['{range} {currency}，包含边界。', '{range} {currency}，包含邊界。', '{range} {currency}, inclusive.']
+    };
+
   try { state = restore(JSON.parse(localStorage.getItem(KEY) || 'null')); } catch (e) { storageOK = false; }
 
   function save() {
+    if (['price', 'filters'].indexOf(new URLSearchParams(location.hash.slice(1)).get('tool')) >= 0) {
+      try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* File URLs may disallow this. */ }
+    }
     try { localStorage.setItem(KEY, JSON.stringify(state)); storageOK = true; }
     catch (e) { storageOK = false; }
     var el = $('status');
@@ -1250,7 +1354,7 @@ window.POE2_HIGHVALUE = {
   }
 
   function compose() {
-    var p = page(), tab = state.tab;
+    var p = page(), tab = state.tab, price = P.compile(p.price);
     var includes = [], excludes = [], always = [], unresolved = [];
     var selIds = Object.keys(p.selected);
     for (var i = 0; i < selIds.length; i++) {
@@ -1285,12 +1389,13 @@ window.POE2_HIGHVALUE = {
     }
     if (p.basic.corruption === 'no') excludes.push(R.esc(loc(I.anchors.corrupted)));
     if (p.basic.corruption === 'yes') always.push(R.esc(loc(I.anchors.corrupted)));
+    if (price.source) always.push(price.source.slice(1, -1));
     always = always.filter(Boolean);
 
     var levels = [];
     levels.push({ includes: includes, excludes: excludes, always: always, match: p.match });
-    levels.push({ includes: includes.map(function (s2) { return s2.replace(/\[\d-\d\]|\[0-9\]|\([0-9|\[\]\-]+\)/g, '[0-9]'); }), excludes: excludes, always: always, match: p.match });
-    var fitted = R.fit(levels, R.BUDGET_SAFE);
+    if (!price.source) levels.push({ includes: includes.map(function (s2) { return s2.replace(/\[\d-\d\]|\[0-9\]|\([0-9|\[\]\-]+\)/g, '[0-9]'); }), excludes: excludes, always: always, match: p.match });
+    var fitted = R.fit(levels, price.source ? R.BUDGET : R.BUDGET_SAFE);
 
     return {
       ok: fitted.level >= 0 && !fitted.empty,
@@ -1299,7 +1404,8 @@ window.POE2_HIGHVALUE = {
       level: fitted.level,
       over: !!fitted.over,
       unresolved: unresolved,
-      count: selIds.length + smFrags.length + tf.length +
+      price: price,
+      count: (price.source ? 1 : 0) + selIds.length + smFrags.length + tf.length +
         ((tab === 'waystone' && p.basic.revives !== '' && p.basic.revives != null) ? 1 : 0) +
         ((p.basic.rarities && p.basic.rarities.length) ? 1 : 0)
     };
@@ -1587,7 +1693,7 @@ window.POE2_HIGHVALUE = {
     list.forEach(function (pr) {
       var n = Object.keys(pr.data.selected || {}).length +
         SUMMARY_FIELDS.filter(function (f) { return pr.data.summary && pr.data.summary[f.id]; }).length +
-        (pr.data.tierMin || pr.data.tierMax ? 1 : 0);
+        (pr.data.tierMin || pr.data.tierMax ? 1 : 0) + (P.compile(pr.data.price).source ? 1 : 0);
       out.push('<div class="fav-item" data-fav="' + html(pr.id) + '">');
       out.push('<span class="fav-name" title="' + html(pr.name) + '">' + html(pr.name) + '</span>');
       out.push('<span class="fav-meta">' + n + ' ' + html(tr('favCountUnit')) + '</span>');
@@ -1601,7 +1707,7 @@ window.POE2_HIGHVALUE = {
     var name = $('fav-name').value.trim();
     if (!name) { $('status').textContent = tr('favNameRequired'); return; }
     var p = page();
-    var snap = sanitizeSnapshot({ prefix: p.prefix, suffix: p.suffix, match: p.match, types: p.types, basic: p.basic, selected: p.selected, summary: p.summary, tierMin: p.tierMin, tierMax: p.tierMax });
+    var snap = sanitizeSnapshot({ prefix: p.prefix, suffix: p.suffix, match: p.match, types: p.types, basic: p.basic, selected: p.selected, summary: p.summary, tierMin: p.tierMin, tierMax: p.tierMax, price: p.price });
     if (!state.presets[state.tab]) state.presets[state.tab] = [];
     state.presets[state.tab].push({ id: 'p' + Date.now() + Math.floor(Math.random() * 1000), name: name.slice(0, 24), data: snap });
     $('fav-name').value = '';
@@ -1614,6 +1720,7 @@ window.POE2_HIGHVALUE = {
     for (var i = 0; i < list.length; i++) if (list[i].id === id) pr = list[i];
     if (!pr) return;
     var p = page(), d = pr.data;
+    p.price = P.sanitize(d.price);
     p.prefix = d.prefix; p.suffix = d.suffix; p.match = d.match;
     p.types = (d.types || []).slice();
     p.basic = JSON.parse(JSON.stringify(d.basic || {}));
@@ -1700,6 +1807,8 @@ window.POE2_HIGHVALUE = {
   function renderResult() {
     var p = page(), res = compose();
     $('condition-count').textContent = res.count;
+    $('regex-heading').textContent = res.price.source ? pt('output') : tr('tradePreview');
+    renderPriceFeedback(res);
     var selIds = Object.keys(p.selected);
     var smActive = SUMMARY_FIELDS.filter(function (f) { return p.summary[f.id]; });
     var hasTier = (p.tierMin || p.tierMax);
@@ -1707,10 +1816,11 @@ window.POE2_HIGHVALUE = {
     var rarSel = p.basic.rarities || [];
     var hasRarity = rarSel.length > 0;
     var summary = $('summary');
-    if (!selIds.length && !smActive.length && !hasTier && !hasRevives && !hasRarity) {
+    if (!selIds.length && !smActive.length && !hasTier && !hasRevives && !hasRarity && !res.price.source) {
       summary.innerHTML = '<p class="hint mb-lg">' + html(tr('noConditions')) + '</p>';
     } else {
       var rows = [];
+      if (res.price.source) rows.push('<div class="result-item inc"><span class="mode">$</span><span class="label">' + html(pt('title')) + '</span><span class="thr">' + html(priceSummary(res.price)) + '</span></div>');
       if (hasTier) {
         var tMin = p.tierMin || '1';
         var tMax = p.tierMax || '16';
@@ -1770,7 +1880,7 @@ window.POE2_HIGHVALUE = {
   }
 
   function renderAll() {
-    renderChrome(); renderPrimary(); renderTierPanel(); renderSummaryPanel(); renderHotBar(); renderHighValue(); renderList(); renderResult(); renderFavorites();
+    renderPrice(); renderChrome(); renderPrimary(); renderTierPanel(); renderSummaryPanel(); renderHotBar(); renderHighValue(); renderList(); renderResult(); renderFavorites();
   }
 
   function bind() {
@@ -1963,10 +2073,83 @@ window.POE2_HIGHVALUE = {
     } catch (e) { $('status').textContent = tr('copyFailed'); }
   }
 
+
+  function pt(id) { return PRICE_WORDS[id][Math.max(0, ['cn', 'tw', 'en'].indexOf(state.language))]; }
+  function priceSummary(result) {
+    var range = result.max ? (result.min === result.max ? '= ' + result.min : result.min + '–' + result.max) : '≥ ' + result.min;
+    return pt('summary').replace('{range}', range).replace('{currency}', pt(result.currency));
+  }
+  function restorePriceLinks() {
+    // Migrate the former standalone settings into the active tab only.
+    try {
+      var raw = JSON.parse(localStorage.getItem(KEY) || 'null');
+      var old = JSON.parse(localStorage.getItem('poe2.price.v1') || 'null');
+      if (old && !(raw && raw[state.tab] && raw[state.tab].price)) page().price = P.sanitize(old);
+    } catch (e) { /* Storage is optional. */ }
+    var params = new URLSearchParams(location.hash.slice(1));
+    if (params.get('tool') === 'price') {
+      page().price = P.sanitize({ mode: params.get('mode'), min: params.get('min'), max: params.get('max'), currency: params.get('cur') });
+    } else if (params.get('tool') === 'filters') {
+      try {
+        var text = params.get('data') || '';
+        if (text.length > 64000) return;
+        var payload = JSON.parse(text);
+        if (!payload || TABS.indexOf(payload.tab) < 0 || !payload.data || typeof payload.data !== 'object' || Array.isArray(payload.data)) return;
+        var imported = defaults();
+        imported.tab = payload.tab; imported.language = payload.language;
+        imported[payload.tab] = sanitizeSnapshot(payload.data);
+        var clean = restore(imported);
+        state.tab = clean.tab; state.language = clean.language;
+        state[state.tab] = clean[state.tab];
+      } catch (e) { /* Invalid share data must not replace existing conditions. */ }
+    }
+  }
+  function renderPrice() {
+    var p = page().price;
+    var labels = { 'price-title': 'title', 'price-intro': 'intro', 'price-currency-label': 'currency', 'price-mode-label': 'mode', 'price-min-label': 'lower', 'price-max-label': 'upper', 'price-help': 'help', 'price-share': 'share', 'price-reset': 'reset' };
+    Object.keys(labels).forEach(function (id) { $(id).textContent = pt(labels[id]); });
+    ['currency', 'mode'].forEach(function (kind) {
+      $('price-' + (kind === 'currency' ? 'currencies' : 'modes')).querySelectorAll('button').forEach(function (b) {
+        var value = b.getAttribute('data-price-' + kind);
+        b.textContent = pt(value); b.setAttribute('aria-pressed', String(p[kind] === value));
+      });
+    });
+    ['min', 'max'].forEach(function (side) { $('price-' + side).value = p[side]; $('price-' + side).placeholder = pt('unlimited'); });
+    $('price-min-field').classList.toggle('is-hidden', p.mode === 'max');
+    $('price-max-field').classList.toggle('is-hidden', p.mode === 'min');
+  }
+  function renderPriceFeedback(res) {
+    var price = res.price, error = price.error && price.error !== 'empty' ? pt(price.error) : '';
+    $('price-feedback').textContent = error;
+    $('price-feedback').className = 'regex-msg' + (error ? ' error' : '');
+    ['min', 'max'].forEach(function (side) { $('price-' + side).setAttribute('aria-invalid', String(!!error)); });
+    $('price-budget').textContent = price.source ? (res.over ? pt('over') : pt('remaining').replace('{p}', price.length).replace('{n}', res.length).replace('{r}', R.BUDGET - res.length)) : '';
+    $('price-share').disabled = !res.ok || res.over || res.unresolved.length > 0;
+  }
+  function bindPrice() {
+    ['currency', 'mode'].forEach(function (kind) {
+      $('price-' + (kind === 'currency' ? 'currencies' : 'modes')).addEventListener('click', function (e) {
+        var b = e.target.closest('button[data-price-' + kind + ']'); if (!b) return;
+        page().price[kind] = b.getAttribute('data-price-' + kind); save(); renderPrice(); renderResult();
+      });
+    });
+    ['min', 'max'].forEach(function (side) {
+      $('price-' + side).addEventListener('input', function (e) { page().price[side] = e.target.value; save(); renderResult(); });
+    });
+    $('price-reset').addEventListener('click', function () { page().price = P.sanitize(null); save(); renderPrice(); renderResult(); });
+    $('price-share').addEventListener('click', function () {
+      var result = compose(); if (!result.ok || result.over || result.unresolved.length) return;
+      var payload = { tab: state.tab, language: state.language, data: sanitizeSnapshot(page()) };
+      var link = new URL(location.href);
+      link.hash = new URLSearchParams({ tool: 'filters', data: JSON.stringify(payload) }).toString();
+      copyText(link.href);
+    });
+  }
+
   function boot() {
     var st = R.selfTest();
     if (!st.ok && window.console) console.warn('engine self-test failed', st.fails);
-    bind(); renderAll();
+    restorePriceLinks(); bindPrice(); bind(); renderAll();
     var el = $('status');
     if (el) el.textContent = st.ok ? tr('saved') : (tr('selfTestFail') + ': ' + st.fails.join(', '));
   }
@@ -1975,220 +2158,7 @@ window.POE2_HIGHVALUE = {
   else boot();
 })();
 </script>
-<script>
-// Price ranges are separate from affix ranges: no 999 clamp or lossy fitting.
-window.POE2_PRICE = (function () {
-  'use strict';
-  var BUDGET = 250;
-  var CURRENCIES = { exalted: 'ex', divine: 'div', chaos: 'chaos' };
-  function shortest(a, b) { return b.length < a.length ? b : a; }
-  function digits(n) {
-    if (!n) return '';
-    return shortest('[0-9]'.repeat(n), '[0-9]{' + n + '}');
-  }
-  function digitSet(ds) {
-    if (ds.length === 1) return ds;
-    var body = '', i = 0;
-    while (i < ds.length) {
-      var j = i;
-      while (j + 1 < ds.length && +ds[j + 1] === +ds[j] + 1) j++;
-      body += j - i >= 3 ? ds[i] + '-' + ds[j] : ds.slice(i, j + 1);
-      i = j + 1;
-    }
-    return '[' + body + ']';
-  }
-  function tokens(pattern) {
-    return pattern.match(/\[[^\]]+\](?:\{[0-9,]+\}|[?*+])?|\([^()]*\)[?*+]?|[0-9]/g) || [];
-  }
-  function union(parts) {
-    parts = parts.filter(function (s, i) { return parts.indexOf(s) === i; });
-    if (parts.length === 1) return parts[0];
-    var nonempty = parts.filter(Boolean);
-    if (nonempty.length !== parts.length) {
-      var inner = union(nonempty);
-      return (tokens(inner).length === 1 && tokens(inner).join('') === inner ? inner : '(' + inner + ')') + '?';
-    }
-    var plain = '(' + parts.join('|') + ')';
-    var lists = parts.map(tokens);
-    // Factor only complete regex tokens, never a partial character class/group.
-    if (lists.some(function (ts, i) { return ts.join('') !== parts[i]; })) return plain;
-    var prefix = '';
-    while (lists.every(function (ts) { return ts.length && ts[0] === lists[0][0]; })) {
-      prefix += lists[0][0]; lists.forEach(function (ts) { ts.shift(); });
-    }
-    if (prefix) plain = shortest(plain, prefix + union(lists.map(function (ts) { return ts.join(''); })));
-    return plain;
-  }
-  function sameWidth(lo, hi) {
-    if (lo === hi) return lo;
-    if (/^0+$/.test(lo) && /^9+$/.test(hi)) return digits(lo.length);
-    var groups = [];
-    for (var d = +lo[0]; d <= +hi[0]; d++) {
-      var suffix = lo.length === 1 ? '' : sameWidth(
-        d === +lo[0] ? lo.slice(1) : '0'.repeat(lo.length - 1),
-        d === +hi[0] ? hi.slice(1) : '9'.repeat(hi.length - 1));
-      var group = groups.filter(function (g) { return g.suffix === suffix; })[0];
-      if (group) group.ds += d; else groups.push({ ds: String(d), suffix: suffix });
-    }
-    return union(groups.map(function (g) { return digitSet(g.ds) + g.suffix; }));
-  }
-  function range(lo, hi) {
-    var parts = [];
-    for (var w = lo.length; w <= hi.length; w++) {
-      parts.push(sameWidth(w === lo.length ? lo : '1' + '0'.repeat(w - 1), w === hi.length ? hi : '9'.repeat(w)));
-    }
-    return union(parts);
-  }
-  function atLeast(lo) {
-    if (lo === '1') return '[1-9][0-9]*';
-    var tail = lo.length === 1 ? '[0-9]+' : '[0-9]{' + lo.length + ',}';
-    return union([sameWidth(lo, '9'.repeat(lo.length)), '[1-9]' + tail]);
-  }
-  function sanitize(raw) {
-    raw = raw && typeof raw === 'object' ? raw : {};
-    return {
-      currency: Object.prototype.hasOwnProperty.call(CURRENCIES, raw.currency) ? raw.currency : 'exalted',
-      mode: ['min', 'max', 'between'].indexOf(raw.mode) >= 0 ? raw.mode : 'between',
-      min: typeof raw.min === 'string' ? raw.min.slice(0, 32) : '',
-      max: typeof raw.max === 'string' ? raw.max.slice(0, 32) : ''
-    };
-  }
-  function compile(raw) {
-    var p = sanitize(raw), lo = p.mode === 'max' ? '' : p.min.trim(), hi = p.mode === 'min' ? '' : p.max.trim();
-    function fail(error) { return { source: '', length: 0, error: error, over: false }; }
-    if (!lo && !hi) return fail('empty');
-    if ([lo, hi].some(function (v) { return v && (!/^[0-9]+$/.test(v) || !Number.isSafeInteger(Number(v)) || Number(v) < 1); })) return fail('integer');
-    lo = lo ? String(Number(lo)) : '1'; hi = hi ? String(Number(hi)) : '';
-    if (hi && Number(lo) > Number(hi)) return fail('order');
-    var number = hi ? range(lo, hi) : atLeast(lo);
-    var source = '"~b/o ' + number + ' ' + CURRENCIES[p.currency] + '"';
-    return { source: source, length: source.length, error: '', over: source.length > BUDGET, min: lo, max: hi, currency: p.currency };
-  }
-  return { compile: compile, sanitize: sanitize, BUDGET: BUDGET };
-})();
-</script>
-<script>
-(function () {
-  'use strict';
-  function bootPrice() {
-    var P = window.POE2_PRICE, key = 'poe2.price.v1', active = false, storageOK = true;
-    var $ = function (id) { return document.getElementById(id); };
-    var words = {
-      title: ['售价筛选', '售價篩選', 'Price filter'],
-      intro: ['按挂牌售价定位物品，复制到游戏内仓库或商店搜索框。', '依掛牌售價尋找物品，複製到遊戲內倉庫或商店搜尋框。', 'Find items by listed price. Paste into the in-game stash or shop search.'],
-      currency: ['币种', '通貨', 'Currency'], mode: ['筛选方式', '篩選方式', 'Compare'],
-      exalted: ['崇高石', '崇高石', 'Exalted'], divine: ['神圣石', '神聖石', 'Divine'], chaos: ['混沌石', '混沌石', 'Chaos'],
-      min: ['至少', '至少', 'At least'], max: ['至多', '至多', 'At most'], between: ['区间', '區間', 'Between'],
-      lower: ['最低价', '最低價', 'Minimum'], upper: ['最高价', '最高價', 'Maximum'],
-      unlimited: ['不限', '不限', 'No limit'], reset: ['重置', '重置', 'Reset'],
-      help: ['仅支持正整数，包含区间两端；留空表示不设该端限制。比例标价不参与匹配。', '僅支援正整數，包含區間兩端；留空表示不設該端限制。比例標價不參與比對。', 'Positive integers, inclusive bounds. Leave a bound blank for no limit. Ratio prices are excluded.'],
-      empty: ['请填写价格条件。', '請填寫價格條件。', 'Enter a price condition.'],
-      integer: ['售价条件未生效：请输入有效的正整数，不支持小数或过大的数值。', '售價條件未生效：請輸入有效的正整數，不支援小數或過大的數值。', 'Price condition not applied: enter valid positive integers, without decimals or excessively large values.'],
-      order: ['售价条件未生效：最低价不能高于最高价。', '售價條件未生效：最低價不能高於最高價。', 'Price condition not applied: minimum must not exceed maximum.'],
-      result: ['售价条件', '售價條件', 'Price condition'], output: ['游戏内搜索框', '遊戲內搜尋框', 'In-game search box'],
-      copy: ['复制正则', '複製正則', 'Copy regex'], share: ['复制链接', '複製連結', 'Copy link'],
-      copied: ['已复制', '已複製', 'Copied'], copyFailed: ['复制失败，请手动选择输出文字复制。', '複製失敗，請手動選取輸出文字複製。', 'Copy failed. Select and copy the output manually.'],
-      remaining: ['剩余 {n} 字符；拼接其他条件时，分隔空格也计入长度。', '剩餘 {n} 字元；串接其他條件時，分隔空格也計入長度。', '{n} characters left; separating spaces also count when adding conditions.'],
-      over: ['超出 250 字符，售价条件不可复制；请简化价格区间。', '超出 250 字元，售價條件無法複製；請簡化價格區間。', 'Over 250 characters. Simplify the price range before copying.'],
-      saved: ['条件已保存在当前浏览器', '條件已儲存在目前瀏覽器', 'Conditions saved in this browser'],
-      saveFailed: ['浏览器无法保存条件；本次仍可生成和复制。', '瀏覽器無法儲存條件；本次仍可產生和複製。', 'Browser storage unavailable; generation and copying still work.'],
-      summary: ['{range} {currency}，包含边界。', '{range} {currency}，包含邊界。', '{range} {currency}, inclusive.']
-    };
-    function t(id) { return words[id][['cn', 'tw', 'en'].indexOf($('language').value) < 0 ? 0 : ['cn', 'tw', 'en'].indexOf($('language').value)]; }
-    var state = P.sanitize(null);
-    try {
-      var saved = JSON.parse(localStorage.getItem(key) || 'null');
-      state = P.sanitize(saved); active = !!(saved && saved.active);
-    } catch (e) { storageOK = false; }
-    var params = new URLSearchParams(location.hash.slice(1));
-    if (params.get('tool') === 'price') {
-      state = P.sanitize({ mode: params.get('mode'), min: params.get('min'), max: params.get('max'), currency: params.get('cur') });
-      active = true;
-    }
-    function save() {
-      try { localStorage.setItem(key, JSON.stringify(Object.assign({ active: active }, state))); storageOK = true; }
-      catch (e) { storageOK = false; }
-      // A shared URL is an initial snapshot, not live state. Remove it after edits
-      // so refreshing restores the user's edited values rather than the old link.
-      if (new URLSearchParams(location.hash.slice(1)).get('tool') === 'price') {
-        try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* file URLs may disallow this */ }
-      }
-    }
-    function renderOutput() {
-      var result = P.compile(state), valid = !!result.source;
-      $('price-source').textContent = result.source;
-      $('price-source').classList.toggle('empty', !valid);
-      $('price-feedback').textContent = result.error ? t(result.error) : '';
-      $('price-feedback').className = 'regex-msg' + (result.error && result.error !== 'empty' ? ' error' : '');
-      ['min', 'max'].forEach(function (side) {
-        $('price-' + side).setAttribute('aria-invalid', result.error === 'integer' || result.error === 'order' ? 'true' : 'false');
-      });
-      var range = result.max ? (result.min === result.max ? '= ' + result.min : result.min + '–' + result.max) : '≥ ' + result.min;
-      $('price-summary').textContent = valid ? t('summary').replace('{range}', range).replace('{currency}', t(result.currency)) : t(result.error);
-      $('price-length').textContent = valid ? result.length + ' / ' + P.BUDGET : '';
-      $('price-length').className = 'len' + (result.over ? ' over' : '');
-      $('price-budget').textContent = !valid ? '' : result.over ? t('over') : t('remaining').replace('{n}', P.BUDGET - result.length);
-      $('price-budget').className = 'regex-msg' + (result.over ? ' error' : '');
-      $('price-copy').disabled = $('price-share').disabled = !valid || result.over;
-      $('price-status').textContent = t(storageOK ? 'saved' : 'saveFailed');
-    }
-    function render() {
-      $('affix-workspace').classList.toggle('is-hidden', active);
-      $('price-workspace').classList.toggle('is-hidden', !active);
-      $('tab-price').setAttribute('aria-pressed', String(active));
-      if (active) $('tabs').querySelectorAll('[data-tab]').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
-      var labels = { 'tab-price': 'title', 'price-title': 'title', 'price-intro': 'intro', 'price-currency-label': 'currency', 'price-mode-label': 'mode', 'price-min-label': 'lower', 'price-max-label': 'upper', 'price-help': 'help', 'price-result-title': 'result', 'price-output-label': 'output', 'price-copy': 'copy', 'price-share': 'share', 'price-reset': 'reset' };
-      Object.keys(labels).forEach(function (id) { $(id).textContent = t(labels[id]); });
-      ['currency', 'mode'].forEach(function (kind) {
-        $('price-' + (kind === 'currency' ? 'currencies' : 'modes')).querySelectorAll('button').forEach(function (b) {
-          var value = b.getAttribute('data-price-' + kind);
-          b.textContent = t(value); b.setAttribute('aria-pressed', String(state[kind] === value));
-        });
-      });
-      ['min', 'max'].forEach(function (side) { $('price-' + side).value = state[side]; $('price-' + side).placeholder = t('unlimited'); });
-      $('price-min-field').classList.toggle('is-hidden', state.mode === 'max');
-      $('price-max-field').classList.toggle('is-hidden', state.mode === 'min');
-      renderOutput();
-    }
-    async function copy(text) {
-      var ok = false;
-      try { await navigator.clipboard.writeText(text); ok = true; } catch (e) {
-        var area = document.createElement('textarea');
-        area.value = text; area.style.position = 'fixed'; area.style.opacity = '0';
-        document.body.appendChild(area); area.select();
-        try { ok = document.execCommand('copy'); } catch (e2) { /* Report below. */ }
-        area.remove();
-      }
-      $('price-status').textContent = t(ok ? 'copied' : 'copyFailed');
-    }
-    $('tabs').addEventListener('click', function (e) {
-      var button = e.target.closest('button');
-      if (!button || (button.id !== 'tab-price' && !button.hasAttribute('data-tab'))) return;
-      active = button.id === 'tab-price'; save(); render();
-    });
-    $('language').addEventListener('change', render);
-    ['currency', 'mode'].forEach(function (kind) {
-      $('price-' + (kind === 'currency' ? 'currencies' : 'modes')).addEventListener('click', function (e) {
-        var b = e.target.closest('button[data-price-' + kind + ']');
-        if (!b) return;
-        state[kind] = b.getAttribute('data-price-' + kind); save(); render();
-      });
-    });
-    ['min', 'max'].forEach(function (side) {
-      $('price-' + side).addEventListener('input', function (e) { state[side] = e.target.value; save(); renderOutput(); });
-    });
-    $('price-reset').addEventListener('click', function () { state = P.sanitize(null); save(); render(); });
-    $('price-copy').addEventListener('click', function () { var r = P.compile(state); if (r.source && !r.over) copy(r.source); });
-    $('price-share').addEventListener('click', function () {
-      var r = P.compile(state); if (!r.source || r.over) return;
-      var link = new URL(location.href), query = new URLSearchParams({ tool: 'price', mode: state.mode, min: state.min, max: state.max, cur: state.currency });
-      link.hash = query.toString(); copy(link.href);
-    });
-    render();
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootPrice);
-  else bootPrice();
-})();
-</script>
+
+
 </body>
 </html>
